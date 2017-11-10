@@ -24,15 +24,16 @@ mongoose.connect(connectionURL, { useMongoClient: true });
 
 const userSchema = mongoose.Schema({
   username: String,
-  userId: { type: Number, unique: true, dropDups: true },
+  userId: { type: String, unique: true, dropDups: true },
   comments: Array, // reference to the comments schema
-  level: String // standard user or admin
+  level: String, // standard user or admin
+  jstArr: Array // the JWTs for a user
 });
 
 const storySchema = mongoose.Schema({
   title: String,
-  storyId: { type: Number, unique: true, dropDups: true },
-  date: { type: Date, default: Date.now },
+  storyId: { type: String, unique: true, dropDups: true },
+  date: { type: String, default: Date.now() },
   infoLine: String, // Date/Time stamp and comments count
   images: Array,
   story: String,
@@ -40,7 +41,7 @@ const storySchema = mongoose.Schema({
 });
 
 const commentsSchema = mongoose.Schema({
-  storyId: { type: Number, unique: true, dropDups: true },
+  storyId: { type: String, unique: true, dropDups: true },
   comments: Array // an array of objects with the comment message, username, time-date stamp, and a commentId
 });
 
@@ -48,9 +49,40 @@ const User = mongoose.model('User', userSchema); // a single user
 const Story = mongoose.model('Story', storySchema); // a single story
 const Comments = mongoose.model('Comments', commentsSchema); // the comments for a single story
 
+// a mutative helper function that creates/updates the infoLine property of the input story
+const createStoryInfoLine = (story) => {
+  if ((story !== undefined) && (story !== null)) {
+    story.infoLine = `${story.date}  |  Comments: ${story.comments.length}`;
+  }
+};
+
+// a helper function to add the remaining fields to complete a story
+const makeAStory = (story) => {
+  if ((story !== undefined) && (story !== null)) {
+    // Insert these on the server
+    // "storyId": { type: Number, unique: true, dropDups: true },
+    // "date": { type: Date, default: Date.now },
+    story.storyId = mongoose.Types.ObjectId();
+    story.date = Date();
+
+    // this will be blank initially, but will be populated when the model instance is updated
+    // "comments": Array // reference to the comments schema
+    story.comments = [];
+
+    // construct this based off of the new fields
+    // "infoLine": String, // Date/Time stamp and comments count
+    createStoryInfoLine(story);
+  } else {
+    console.log('ERROR in makeAStory');
+  }
+
+  return story;
+}
+
+// this is a helper function to create a new model instance of the correct type
 const newModel = (data, type) => {
   if (type === 'Story') {
-    return new Story(data);
+    return new Story(makeAStory(data));
   } else if (type === 'User') {
     return new User(data);
   } else if (type === 'Comments') {
@@ -59,6 +91,13 @@ const newModel = (data, type) => {
     console.log('\n\nERROR: Not set up to handle a model of type', type, '\n\n');
     return 'Unknown Type ' + type;
   }
+};
+
+// this function updates an existing story
+// add comments with this function
+//   update the story's infoLine field also
+const updateStory = () => {
+
 };
 
 // a generic save function, for use with either model type

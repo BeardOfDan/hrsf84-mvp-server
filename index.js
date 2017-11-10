@@ -35,7 +35,8 @@ app.get('/login', (req, res, next) => {
 });
 
 // get route for any unhandled path
-app.get('*', (req, res, next) => {
+// If the url is on a whitelist, then don't authenticate, else, authenticate user
+app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
 
   // do a db query for a story entry with where the name is the route
   const storyName = req.url.slice(1);
@@ -61,6 +62,18 @@ app.get('*', (req, res, next) => {
 // ===== POST ROUTES =====
 // =======================
 
+app.post('/story', /*Authenticate User Here*/(req, res, next) => {
+  // expecting a json on req.body called story
+  const story = req.body.story;
+
+  db.save(story, 'Story')
+    .then((result) => {
+      res.end('Story saved');
+    })
+    .catch((e) => {
+      res.end('Error in saving the story...');
+    })
+});
 
 
 
