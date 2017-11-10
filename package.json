@@ -1,0 +1,28 @@
+{
+  "name": "hrsf84-mvp-server",
+  "version": "1.0.0",
+  "description": "An API to handle the server side considerations for the mvp project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeardOfDan/hrsf84-mvp-server.git"
+  },
+  "author": "Dan Roberts",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BeardOfDan/hrsf84-mvp-server/issues"
+  },
+  "homepage": "https://github.com/BeardOfDan/hrsf84-mvp-server#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.13.1",
+    "nodemon": "^1.12.1"
+  }
+}
