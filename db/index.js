@@ -126,6 +126,7 @@ const save = (data, modelType = 'Story') => {
   const arr = [];
 
   if (Array.isArray(data)) {
+    console.log('About to get data from an array');
     for (let i = 0; i < data.length; i++) {
       if ((data[i].constructor.modelName === 'Story') && (data[i].title.length < 1)) {
         console.log('You can\'t make a story without a title!');
@@ -140,6 +141,7 @@ const save = (data, modelType = 'Story') => {
     }
 
   } else {
+    console.log('About to get a single story');
     if ((data.constructor.modelName === 'Story') && (data.title.length < 1)) {
       console.log('You can\'t make a story without a title!');
       return 'ERROR! You can\'t make a story without a title!';
