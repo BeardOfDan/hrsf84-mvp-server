@@ -62,11 +62,6 @@ const makeAStory = (story) => {
     // give default values and validate the existing properties
     story.images = story.images || [];
 
-    if (story.title.length < 1) {
-      console.log('You can\'t make a story without a title!');
-      return 'ERROR! You can\'t make a story without a title!';
-    }
-
     story.story = story.story || '';
 
     if ((story.images.length < 1) && (story.story.length < 1)) {
@@ -132,6 +127,11 @@ const save = (data, modelType = 'Story') => {
 
   if (Array.isArray(data)) {
     for (let i = 0; i < data.length; i++) {
+      if ((data.constructor.modelName === 'Story') && (data.title.length < 1)) {
+        console.log('You can\'t make a story without a title!');
+        return 'ERROR! You can\'t make a story without a title!';
+      }
+
       arr.push(newModel(data[i], modelType));
     }
   } else {
