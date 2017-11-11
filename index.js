@@ -48,10 +48,16 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
   db.loadStories(undefined, storyName)
     .then((story) => {
       if ((story !== undefined) && (story !== null)) {
-
-        // TODO: render the story
-
-        res.end(`You found the story of "${storyName}"`);
+        db.loadStories(undefined, storyName)
+          .then((data) => {
+            // Since this is just an API for the client side stuff,
+            //   the data does not need to be made into a renderable page
+            // That will be handled by the client side of this project
+            res.end(JSON.stringify(data));
+          })
+          .catch((e) => {
+            console.log('\nError in the attempt to load a story\n\n', e);
+          });
 
       } else { // there is no story
         console.log('The url "', storyName, '" does not exist!');

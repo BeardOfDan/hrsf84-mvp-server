@@ -167,6 +167,7 @@ const loadStories = (count, name) => {
 
   const handler = {};
   handler.then = function (cb) {
+    console.log('\n\nYou found a MAJOR Error in loadStories\n\n');
     cb('\nUnhandled situation in loadStories\nNOTE: This should be impossible to reach!\n');
   }
   return handler;
