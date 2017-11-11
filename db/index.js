@@ -142,6 +142,8 @@ const save = (data, modelType = 'Story') => {
 
   } else {
     console.log('About to get a single story');
+    console.log(data.constructor.modelName === 'Story');
+    console.log(data.title.length < 1);
     if ((data.constructor.modelName === 'Story') && (data.title.length < 1)) {
       console.log('You can\'t make a story without a title!');
       return 'ERROR! You can\'t make a story without a title!';
