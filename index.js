@@ -56,7 +56,7 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
             //   the data does not need to be made into a renderable page
             // That will be handled by the client side of this project
             res.status(200)
-              .set({ 'Access-Control-Allow-Origin': '<origin> | *' })
+              .append('Access-Control-Allow-Origin', ['*'])
               .end(JSON.stringify(data));
           })
           .catch((e) => {
