@@ -24,7 +24,9 @@ app.set('view engine', 'ejs');
 // ======================
 
 app.get('/', /* See if the user is logged in here */(req, res, next) => {
-  res.render(publicFilesPath + 'index.html');
+  res
+    .append('Access-Control-Allow-Origin', ['*'])
+    .render(publicFilesPath + 'index.html');
 });
 
 app.get('/signup', (req, res, next) => {
@@ -66,7 +68,9 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
       } else { // there is no story
         console.log('The url "', storyName, '" does not exist!');
         // res.status(404).redirect('/html/404Page.html');
-        res.status(404).end('The url "', storyName, '" does not exist!');
+        res.status(404)
+          .append('Access-Control-Allow-Origin', ['*'])
+          .end('The url "', storyName, '" does not exist!');
       }
     });
 
@@ -90,22 +94,24 @@ app.post('/story', /*Authenticate User Here*/(req, res, next) => {
       } else {
         if (result === 'ERROR! You can\'t make a story without a title!') {
           // throw new Error('There is no title for this story\n\n');
-          res.end('\n\nError in saving the story...\n  It had no title!\n\n');
+          res
+            .append('Access-Control-Allow-Origin', ['*'])
+            .end('\n\nError in saving the story...\n  It had no title!\n\n');
         } else {
           // throw new Error('Uncaught Error in POST /story \'s db.save promise chain');
-          res.end('\n\nError in saving the story...\n');
+          res
+            .append('Access-Control-Allow-Origin', ['*'])
+            .end('\n\nError in saving the story...\n');
         }
       }
     })
     .catch((e) => {
-      res.end('\n\nError in saving the story...\n');
+      res
+        .append('Access-Control-Allow-Origin', ['*'])
+        .end('\n\nError in saving the story...\n');
     })
 });
-
-
-
 
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
 });
-
