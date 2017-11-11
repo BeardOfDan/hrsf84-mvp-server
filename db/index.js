@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
 });
 
 const storySchema = mongoose.Schema({
-  title: String,
+  title: { type: String, unique: true, dropDups: true },
   storyId: { type: String, unique: true, dropDups: true },
   date: { type: String, default: Date.now() },
   infoLine: String, // Date/Time stamp and comments count
@@ -129,7 +129,11 @@ const save = (data, modelType = 'Story') => {
         differentModelsSaveMessages(model);
       })
       .catch((e) => {
-        console.log('\nError:\n', e, '\n\n');
+        if (e.MongoError.slice(0, 26) === 'E11000 duplicate key error') {
+          console.log('Did not save this story because another story with the same title already exists');
+        } else {
+          console.log('\nError:\n', e, '\n\n');
+        }
       });
   });
 
