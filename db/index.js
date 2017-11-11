@@ -59,6 +59,14 @@ const createStoryInfoLine = (story) => {
 // a helper function to add the remaining fields to complete a story
 const makeAStory = (story) => {
   if ((story !== undefined) && (story !== null)) {
+    // give default values and validate the existing properties
+    story.images = story.images || [];
+
+    if (story.title.length < 1) {
+      console.log('You can\'t make a story without a title!');
+      throw new Error('There is no title for this story\n\n');
+    }
+
     // Insert these on the server
     // "storyId": { type: Number, unique: true, dropDups: true },
     // "date": { type: Date, default: Date.now },

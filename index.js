@@ -88,7 +88,7 @@ app.post('/story', /*Authenticate User Here*/(req, res, next) => {
       res.end('Story saved');
     })
     .catch((e) => {
-      res.end('Error in saving the story...');
+      res.end('\n\nError in saving the story...\n');
     })
 });
 
