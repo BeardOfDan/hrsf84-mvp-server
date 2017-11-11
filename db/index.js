@@ -45,9 +45,36 @@ const commentsSchema = mongoose.Schema({
   comments: Array // an array of objects with the comment message, username, time-date stamp, and a commentId
 });
 
+// ==================
+// ===== Models =====
+// ==================
+
 const User = mongoose.model('User', userSchema); // a single user
 const Story = mongoose.model('Story', storySchema); // a single story
 const Comments = mongoose.model('Comments', commentsSchema); // the comments for a single story
+
+// ============================
+// ===== Helper Functions =====
+// ============================
+
+// Error handling helper function
+// if I need to stop a promise chain, without throwing an error,
+//   (which seems to randomly break the program. Not sure why...)
+// then return an object with a then property with a value of a call to this function
+const errorMessageFunction = function (message) {
+  // returns a function to act in the place of a .then call in the promise chain
+  return function (cb) {
+    cb(message);
+    return { // returns a function to act in place of the .catch call in the promise chain
+      'catch': function (cb) {
+        cb('You had an error!');
+      }
+      // NOTE: if further catch blocks are encountered, I will have to add a helper function
+      //   to pseudo-recursively generate functions with .then methods (and a .catch method too)
+      // But for now, it is fine as is
+    };
+  };
+};
 
 // a mutative helper function that creates/updates the infoLine property of the input story
 const createStoryInfoLine = (story) => {
@@ -103,13 +130,6 @@ const newModel = (data, type) => {
   }
 };
 
-// this function updates an existing story
-// add comments with this function
-//   update the story's infoLine field also
-const updateStory = () => {
-
-};
-
 // a helper function to display an unique output message for the particular type of model
 const differentModelsSaveMessages = (model) => {
   const type = model.constructor.modelName;
@@ -120,18 +140,15 @@ const differentModelsSaveMessages = (model) => {
   }
 };
 
-// Error handling helper data
-const errorMessageFunction = function (message) {
-  let func = function (cb) {
-    cb(message);
-    return {
-      'catch': function (cb) {
-        cb('You had an error!');
-      }
-    };
-  };
+// ==============================
+// ===== Exported Functions =====
+// ==============================
 
-  return func;
+// this function updates an existing story
+// add comments with this function
+//   update the story's infoLine field also
+const updateStory = () => {
+  // TODO: write this function
 };
 
 // a generic save function, for use with either model type
@@ -216,7 +233,7 @@ const loadStories = (count, name) => {
   return handler;
 };
 
-module.exports = { save, loadStories };
+module.exports = { save, loadStories, updateStory };
 
 
 
