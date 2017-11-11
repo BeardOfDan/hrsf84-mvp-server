@@ -127,15 +127,25 @@ const save = (data, modelType = 'Story') => {
 
   if (Array.isArray(data)) {
     for (let i = 0; i < data.length; i++) {
-      if ((data.constructor.modelName === 'Story') && (data.title.length < 1)) {
+      if ((data[i].constructor.modelName === 'Story') && (data[i].title.length < 1)) {
         console.log('You can\'t make a story without a title!');
-        return 'ERROR! You can\'t make a story without a title!';
+        continue;
       }
 
       arr.push(newModel(data[i], modelType));
     }
+
+    if ((arr.length < 1) && (data.length > 0)) {
+      return 'ERROR! You can\'t make a story without a title!';
+    }
+
   } else {
-    arr.push(newModel(data, modelType));
+    if ((data.constructor.modelName === 'Story') && (data.title.length < 1)) {
+      console.log('You can\'t make a story without a title!');
+      return 'ERROR! You can\'t make a story without a title!';
+    } else {
+      arr.push(newModel(data, modelType));
+    }
   }
 
   const savePromises = arr.map((model) => {
