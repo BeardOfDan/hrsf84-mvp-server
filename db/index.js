@@ -126,7 +126,6 @@ const save = (data, modelType = 'Story') => {
   const arr = [];
 
   if (Array.isArray(data)) {
-    console.log('About to get data from an array');
     for (let i = 0; i < data.length; i++) {
       if ((data[i].constructor.modelName === 'Story') && (data[i].title.length < 1)) {
         console.log('You can\'t make a story without a title!');
@@ -137,17 +136,21 @@ const save = (data, modelType = 'Story') => {
     }
 
     if ((arr.length < 1) && (data.length > 0)) {
-      return 'ERROR! You can\'t make a story without a title!';
+      return {
+        'then': function (cb) {
+          cb(`ERROR! You can\'t make a story without a title!`);
+        }
+      };
     }
 
   } else {
-    console.log('About to get a single story');
-    console.log(modelType === 'Story');
-    console.log(data.constructor.modelName);
-    console.log(data.title.length < 1);
     if ((modelType === 'Story') && (data.title.length < 1)) {
       console.log('You can\'t make a story without a title!');
-      return 'ERROR! You can\'t make a story without a title!';
+      return {
+        'then': function (cb) {
+          cb(`ERROR! You can\'t make a story without a title!`);
+        }
+      };
     } else {
       arr.push(newModel(data, modelType));
     }
