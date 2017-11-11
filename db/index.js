@@ -64,7 +64,14 @@ const makeAStory = (story) => {
 
     if (story.title.length < 1) {
       console.log('You can\'t make a story without a title!');
-      throw new Error('There is no title for this story\n\n');
+      return 'ERROR! You can\'t make a story without a title!';
+    }
+
+    story.story = story.story || '';
+
+    if ((story.images.length < 1) && (story.story.length < 1)) {
+      // there is nothing but a title here!
+      // throw the appropriate error here
     }
 
     // Insert these on the server
