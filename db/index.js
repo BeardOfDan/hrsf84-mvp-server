@@ -100,6 +100,16 @@ const updateStory = () => {
 
 };
 
+// a helper function to display an unique output message for the particular type of model
+const differentModelsSaveMessages = (model) => {
+  const type = model.constructor.modelName;
+  if (type === 'Story') {
+    console.log(`The ${type} model '${model.title}' was saved`);
+  } else {
+    console.log(`The ${type} model was saved`);
+  }
+};
+
 // a generic save function, for use with either model type
 // returns a promise
 const save = (data, modelType = 'Story') => {
@@ -116,7 +126,7 @@ const save = (data, modelType = 'Story') => {
   const savePromises = arr.map((model) => {
     return model.save()
       .then(function (model) {
-        console.log(`The ${modelType} model ${model.name} of type was saved`);
+        differentModelsSaveMessages(model);
       })
       .catch((e) => {
         console.log('\nError:\n', e, '\n\n');
