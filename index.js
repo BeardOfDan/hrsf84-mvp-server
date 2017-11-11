@@ -63,7 +63,8 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
 
       } else { // there is no story
         console.log('The url "', storyName, '" does not exist!');
-        res.status(404).redirect('/html/404Page.html');
+        // res.status(404).redirect('/html/404Page.html');
+        res.status(404).end('The url "', storyName, '" does not exist!');
       }
     });
 
