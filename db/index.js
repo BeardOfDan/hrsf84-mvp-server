@@ -120,6 +120,19 @@ const differentModelsSaveMessages = (model) => {
   }
 };
 
+// Error handling helper data
+const errorMessageFunction = function (cb, message) {
+  let func = function (cb, message) {
+    cb(message);
+  };
+
+  func.catch = function (cb, message) {
+    cb(message);
+  }
+
+  return func;
+};
+
 // a generic save function, for use with either model type
 // returns a promise
 const save = (data, modelType = 'Story') => {
@@ -137,9 +150,7 @@ const save = (data, modelType = 'Story') => {
 
     if ((arr.length < 1) && (data.length > 0)) {
       return {
-        'then': function (cb) {
-          cb(`ERROR! You can\'t make a story without a title!`);
-        }
+        'then': errorMessageFunction(cb, `ERROR! You can\'t make a story without a title!`)
       };
     }
 
@@ -147,9 +158,7 @@ const save = (data, modelType = 'Story') => {
     if ((modelType === 'Story') && (data.title.length < 1)) {
       console.log('You can\'t make a story without a title!');
       return {
-        'then': function (cb) {
-          cb(`ERROR! You can\'t make a story without a title!`);
-        }
+        'then': errorMessageFunction(cb, `ERROR! You can\'t make a story without a title!`)
       };
     } else {
       arr.push(newModel(data, modelType));
