@@ -89,9 +89,11 @@ app.post('/story', /*Authenticate User Here*/(req, res, next) => {
         res.end('Story saved');
       } else {
         if (result === 'ERROR! You can\'t make a story without a title!') {
-          throw new Error('There is no title for this story\n\n');
+          // throw new Error('There is no title for this story\n\n');
+          res.end('\n\nError in saving the story...\n  It had no title!\n\n');
         } else {
-          throw new Error('Uncaught Error in POST /story \'s db.save promise chain');
+          // throw new Error('Uncaught Error in POST /story \'s db.save promise chain');
+          res.end('\n\nError in saving the story...\n');
         }
       }
     })
