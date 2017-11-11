@@ -124,11 +124,12 @@ const differentModelsSaveMessages = (model) => {
 const errorMessageFunction = function (message) {
   let func = function (cb) {
     cb(message);
+    return {
+      'catch': function (cb) {
+        cb('You had an error!');
+      }
+    };
   };
-
-  func.catch = function (cb, message) {
-    cb(message);
-  }
 
   return func;
 };
