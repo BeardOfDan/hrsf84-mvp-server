@@ -70,7 +70,7 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
         // res.status(404).redirect('/html/404Page.html');
         res.status(404)
           .append('Access-Control-Allow-Origin', ['*'])
-          .end({ 'error': 'The url "' + storyName + '" does not exist!' });
+          .end(JSON.stringify({ 'error': 'The url "' + storyName + '" does not exist!' }));
       }
     });
 
