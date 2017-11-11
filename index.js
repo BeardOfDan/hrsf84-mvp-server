@@ -50,10 +50,12 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
       if ((story !== undefined) && (story !== null)) {
         db.loadStories(undefined, storyName)
           .then((data) => {
+            console.log('The data', JSON.stringify(data, undefined, 2));
+
             // Since this is just an API for the client side stuff,
             //   the data does not need to be made into a renderable page
             // That will be handled by the client side of this project
-            res.end(JSON.stringify(data));
+            res.status(200).end(JSON.stringify(data));
           })
           .catch((e) => {
             console.log('\nError in the attempt to load a story\n\n', e);
