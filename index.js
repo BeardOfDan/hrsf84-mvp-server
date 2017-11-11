@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./db/index');
+const querystring = require('querystring');
 
 const app = express();
 
@@ -37,18 +38,23 @@ app.get('/login', (req, res, next) => {
 // get route for any unhandled path
 // If the url is on a whitelist, then don't authenticate, else, authenticate user
 app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
-
   // do a db query for a story entry with where the name is the route
-  const storyName = req.url.slice(1);
+
+  // get the storyName and undo the url encoding
+  const storyName = querystring.unescape(req.url.slice(1));
 
   // if the storyName query returns a result, render the result
   // else display the (below) 404 page code
   db.loadStories(undefined, storyName)
     .then((story) => {
       if ((story !== undefined) && (story !== null)) {
-        // render the story
+
+        // TODO: render the story
+
+        res.end(`You found the story of "${storyName}"`);
 
       } else { // there is no story
+        console.log('The url "', storyName, '" does not exist!');
         res.status(404).redirect('/html/404Page.html');
       }
     });
