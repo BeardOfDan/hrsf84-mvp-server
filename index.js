@@ -29,13 +29,13 @@ app.get('/', /* See if the user is logged in here */(req, res, next) => {
     .render(publicFilesPath + 'index.html');
 });
 
-app.get('/signup', (req, res, next) => {
-  res.end('You are at the signup page');
-});
+// app.get('/signup', (req, res, next) => {
+//   res.end('You are at the signup page');
+// });
 
-app.get('/login', (req, res, next) => {
-  res.end('You are at the login page');
-});
+// app.get('/login', (req, res, next) => {
+//   res.end('You are at the login page');
+// });
 
 // get route for any unhandled path
 // If the url is on a whitelist, then don't authenticate, else, authenticate user
@@ -90,7 +90,9 @@ app.post('/story', /*Authenticate User Here*/(req, res, next) => {
   db.save(story, 'Story')
     .then((result) => {
       if (result.slice(0, 6) !== 'ERROR!') {
-        res.end('Story saved');
+        res
+          .append('Access-Control-Allow-Origin', ['*'])
+          .end('Story saved');
       } else {
         if (result === 'ERROR! You can\'t make a story without a title!') {
           // throw new Error('There is no title for this story\n\n');
