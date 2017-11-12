@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.get('', (req, res, next) => {
   res
     .append('Access-Control-Allow-Origin', ['*'])
-    .end('You have NOT specified any action through the url');
+    .end(JSON.stringify({ 'error': 'You have NOT specified any action through the url' }));
 });
 
 // ======================
@@ -32,7 +32,7 @@ app.get('', (req, res, next) => {
 app.get('/', /* See if the user is logged in here */(req, res, next) => {
   res
     .append('Access-Control-Allow-Origin', ['*'])
-    .end('You have not specified any action through the url');
+    .end(JSON.stringify({ 'error': 'You have NOT specified any action through the url' }));
 });
 
 // app.get('/signup', (req, res, next) => {
