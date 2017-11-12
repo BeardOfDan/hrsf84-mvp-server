@@ -19,6 +19,11 @@ const PORT = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs');
 
+app.get('', (req, res, next) => {
+  res
+    .append('Access-Control-Allow-Origin', ['*'])
+    .end('You have NOT specified any action through the url');
+});
 
 // ======================
 // ===== GET ROUTES =====
@@ -27,7 +32,7 @@ app.set('view engine', 'ejs');
 app.get('/', /* See if the user is logged in here */(req, res, next) => {
   res
     .append('Access-Control-Allow-Origin', ['*'])
-    .render(publicFilesPath + 'index.html');
+    .end('You have not specified any action through the url');
 });
 
 // app.get('/signup', (req, res, next) => {
