@@ -11,7 +11,8 @@ const publicFilesPath = __dirname + '/public/';
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static(publicFilesPath));
+// Since this is a backend api, this line is no longer required
+// app.use(express.static(publicFilesPath));
 
 
 const PORT = process.env.PORT || 5000;
