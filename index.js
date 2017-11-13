@@ -54,34 +54,50 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
   // get the storyName and undo the url encoding
   const storyName = querystring.unescape(req.url.slice(1));
 
-  // if the storyName query returns a result, render the result
-  // else display the (below) 404 page code
-  db.loadStories(undefined, storyName)
-    .then((story) => {
-      if ((story !== undefined) && (story !== null)) {
-        db.loadStories(undefined, storyName)
-          .then((data) => {
-            console.log('The data', JSON.stringify(data, undefined, 2));
+  const specificPaths = ['Home'];
 
-            // Since this is just an API for the client side stuff,
-            //   the data does not need to be made into a renderable page
-            // That will be handled by the client side of this project
-            res.status(200)
-              .append('Access-Control-Allow-Origin', ['*'])
-              .end(JSON.stringify(data));
-          })
-          .catch((e) => {
-            console.log('\nError in the attempt to load a story\n\n', e);
-          });
-
-      } else { // there is no story
-        console.log('The url "', storyName, '" does not exist!');
-        // res.status(404).redirect('/html/404Page.html');
-        res.status(404)
+  // if it is a specific url, then use a particular path
+  if (specificPaths.indexOf(storyName) > -1) {
+    // do a db query to sort stories descending by infoline (it starts with a time/date stamp) then limit it to like 5
+    db.loadStories(5)
+      .then((stories) => {
+        const data = { 'stories': stories };
+        res.status(200)
           .append('Access-Control-Allow-Origin', ['*'])
-          .end(JSON.stringify({ 'error': 'The url "' + storyName + '" does not exist!' }));
-      }
-    });
+          .end(JSON.stringify(data));
+      });
+
+  } else { // do a db query for a matching story
+    // if the storyName query returns a result, render the result
+    // else display the (below) 404 page code
+    db.loadStories(undefined, storyName)
+      .then((story) => {
+        if ((story !== undefined) && (story !== null)) {
+          db.loadStories(undefined, storyName)
+            .then((data) => {
+              console.log('The data', JSON.stringify(data, undefined, 2));
+
+              // Since this is just an API for the client side stuff,
+              //   the data does not need to be made into a renderable page
+              // That will be handled by the client side of this project
+              res.status(200)
+                .append('Access-Control-Allow-Origin', ['*'])
+                .end(JSON.stringify(data));
+            })
+            .catch((e) => {
+              console.log('\nError in the attempt to load a story\n\n', e);
+            });
+
+        } else { // there is no story
+          console.log('The url "', storyName, '" does not exist!');
+          // res.status(404).redirect('/html/404Page.html');
+          res.status(404)
+            .append('Access-Control-Allow-Origin', ['*'])
+            .end(JSON.stringify({ 'error': 'The url "' + storyName + '" does not exist!' }));
+        }
+      });
+  }
+
 
   // res.status(404).end(`404 page\nThe route ${req.url} is not accounted for\nInsert Gandalf reference here:\n  They're not all acounted for, the lost seeing stones`);
 });

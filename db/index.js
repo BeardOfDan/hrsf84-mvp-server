@@ -206,8 +206,8 @@ const save = (data, modelType = 'Story') => {
 const loadStories = (count, name) => {
   // at the start, only implement the no argument version of this function
   if (count !== undefined) {
-    // do a query with .limit(count)
-    return Story.find().limit(count).exec()
+    // do a query for the most recent stories with .limit(count)
+    return Story.find().sort({ 'infoLine': -1 }).limit(count).exec()
       .catch((e) => {
         console.log('\nError in loadstories if case\n', e);
       })
