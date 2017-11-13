@@ -30,7 +30,7 @@ app.get('', /* See if the user is logged in here */(req, res, next) => {
     // there is no url, so redirect to the client's home page or something
     res
       .append('Access-Control-Allow-Origin', ['*'])
-      .end(JSON.stringify({ 'directive': { 'redirect': 'Home Page' } }));
+      .end(JSON.stringify({ 'directive': { 'redirect': 'Home' } }));
   } else {
     res
       .append('Access-Control-Allow-Origin', ['*'])
@@ -54,18 +54,26 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
   // get the storyName and undo the url encoding
   const storyName = querystring.unescape(req.url.slice(1));
 
-  const specificPaths = ['Home'];
+  const specificPaths = ['', '/', 'Home', 'Login', 'Signup'];
+
+  const index = specificPaths.indexOf(storyName);
 
   // if it is a specific url, then use a particular path
-  if (specificPaths.indexOf(storyName) > -1) {
-    // do a db query to sort stories descending by infoline (it starts with a time/date stamp) then limit it to like 5
-    db.loadStories(5)
-      .then((stories) => {
-        const data = { 'stories': stories };
-        res.status(200)
-          .append('Access-Control-Allow-Origin', ['*'])
-          .end(JSON.stringify(data));
-      });
+  if (index > -1) {
+    if (index < 3) {
+      // do a db query to sort stories descending by infoline (it starts with a time/date stamp) then limit it to like 5
+      db.loadStories(5) // load the 5 most recent stories
+        .then((stories) => {
+          const data = { 'stories': stories };
+          res.status(200)
+            .append('Access-Control-Allow-Origin', ['*'])
+            .end(JSON.stringify(data));
+        });
+    } else {
+      res.status(200)
+        .append('Access-Control-Allow-Origin', ['*'])
+        .end(JSON.stringify({ 'directive': { 'loadImg': 'https://www.commitstrip.com/wp-content/uploads/2017/06/Strip-La-s%C3%A9curit%C3%A9-apr%C3%A8s-tout-english650-final.jpg' } }));
+    }
 
   } else { // do a db query for a matching story
     // if the storyName query returns a result, render the result
