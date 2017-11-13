@@ -233,7 +233,15 @@ const loadStories = (count, name) => {
   return handler;
 };
 
-module.exports = { save, loadStories, updateStory };
+const loadAllStories = () => {
+  // do a query for the most recent stories with .limit(count)
+  return Story.find().sort({ 'infoLine': -1 }).exec()
+    .catch((e) => {
+      console.log('\nError in loadstories if case\n', e);
+    });
+};
+
+module.exports = { save, loadStories, updateStory, loadAllStories };
 
 
 

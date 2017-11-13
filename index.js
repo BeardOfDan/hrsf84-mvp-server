@@ -54,7 +54,7 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
   // get the storyName and undo the url encoding
   const storyName = querystring.unescape(req.url.slice(1));
 
-  const specificPaths = ['', '/', 'Home', 'Login', 'Signup'];
+  const specificPaths = ['', '/', 'Home', 'All Stories', 'Login', 'Signup'];
 
   const index = specificPaths.indexOf(storyName);
 
@@ -63,6 +63,14 @@ app.get('*', /*Conditionally Authenticate User Here*/(req, res, next) => {
     if (index < 3) {
       // do a db query to sort stories descending by infoline (it starts with a time/date stamp) then limit it to like 5
       db.loadStories(5) // load the 5 most recent stories
+        .then((stories) => {
+          const data = { 'stories': stories };
+          res.status(200)
+            .append('Access-Control-Allow-Origin', ['*'])
+            .end(JSON.stringify(data));
+        });
+    } else if (index === 3) {
+      db.loadAllStories() // load all of the stories
         .then((stories) => {
           const data = { 'stories': stories };
           res.status(200)
