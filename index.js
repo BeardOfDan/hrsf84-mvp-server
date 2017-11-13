@@ -19,20 +19,23 @@ const PORT = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs');
 
-app.get('', (req, res, next) => {
-  res
-    .append('Access-Control-Allow-Origin', ['*'])
-    .end(JSON.stringify({ 'error': 'You have NOT specified any action through the url' }));
-});
-
 // ======================
 // ===== GET ROUTES =====
 // ======================
 
-app.get('/', /* See if the user is logged in here */(req, res, next) => {
-  res
-    .append('Access-Control-Allow-Origin', ['*'])
-    .end(JSON.stringify({ 'error': 'You have NOT specified any action through the url' }));
+// doing a get route without the / handles a no path edge case, this allows for me to set a home page by the url with ease
+app.get('', /* See if the user is logged in here */(req, res, next) => {
+  console.log('req.url', req.url);
+  if ((req.url.length < 1) || (req.url === '/')) {
+    // there is no url, so redirect to the client's home page or something
+    res
+      .append('Access-Control-Allow-Origin', ['*'])
+      .end(JSON.stringify({ 'directive': { 'redirect': 'Home Page' } }));
+  } else {
+    res
+      .append('Access-Control-Allow-Origin', ['*'])
+      .end(JSON.stringify({ 'error': 'You have NOT specified any action through the url' }));
+  }
 });
 
 // app.get('/signup', (req, res, next) => {
